@@ -10,33 +10,151 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+// model User {
+//   id String @id @default(uuid())
+//   email String @unique
+//   name String
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+//   movie_rent MovieRent[] @relation("user")
+
+//   @@map("users")//renomeia a tabela
+// }
+
+// model Movie{
+//   id String @id @default(uuid())
+//   title String @unique
+//   duration Int
+//   release_date DateTime
+//   movie_rent MovieRent[] @relation("movie") 
+
+//   @@map("movies")
+// }
+
+// model MovieRent{
+//   user User @relation("user", fields:[userId], references: [id])
+//   userId String
+//   movie Movie @relation("movie", fields:[movieId], references: [id])
+//   movieId String
+
+//   @@id([userId, movieId])
+//   @@map("movie_rent")
+// }
+
+model Hotel{
   id String @id @default(uuid())
-  email String @unique
-  name String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  movie_rent MovieRent[] @relation("user")
+  cnpj String @unique
+  nome String
+  endereco String
+  numeroEstrelas Int
+  funcionarios Funcionario[]
 
-  @@map("users")//renomeia a tabela
+  @@map("hotel")
 }
 
-model Movie{
+model Cliente{
   id String @id @default(uuid())
-  title String @unique
-  duration Int
-  release_date DateTime
-  movie_rent MovieRent[] @relation("movie") 
+  nome String
+  cpf String @unique
+  email String
+  telefone String
+  nivel String @default("bronze")
+  reservas Reserva[]
 
-  @@map("movies")
+  @@map("cliente")
 }
 
-model MovieRent{
-  user User @relation("user", fields:[userId], references: [id])
-  userId String
-  movie Movie @relation("movie", fields:[movieId], references: [id])
-  movieId String
+model Funcionario{
+  id String @id @default(uuid())
+  senha String
+  nome String
+  cpf String @unique
+  cargo String
+  dataAdmissao DateTime @default(now())
+  reservas Reserva[]
 
-  @@id([userId, movieId])
-  @@map("movie_rent")
+  hotel Hotel @relation(fields: [hotelId], references: [id])
+  hotelId String
+
+  @@map("funcionario")
 }
+
+
+
+model Quarto{
+  id String @id @default(uuid())
+  numero Int @unique
+  capacidadeAdultos Int
+  capacidadeCriancas Int
+  disponibilidade String
+  precoDiaria Decimal
+  tipo String
+
+  reservas ReservaQuartos[]
+  tags TagQuartos[]
+
+  @@map("quarto")
+}
+
+model Reserva{
+  id String @id @default(uuid())
+  checkin DateTime
+  checkout DateTime
+  nAdultos Int
+  nCriancas Int
+  preco Decimal
+  status String
+  pagamento Pagamento? 
+
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+  clienteId String 
+
+  funcionario Funcionario @relation(fields: [funcionarioId], references:[id])
+  funcionarioId String
+
+  quartos ReservaQuartos[]
+
+  @@map("reserva")
+}
+
+model Pagamento{
+  id String @id @default(uuid())
+  metodo String
+  valor Decimal
+  data DateTime @default(now())
+  reserva Reserva @relation(fields: [reservaId], references: [id])
+  reservaId String @unique
+
+  @@map("pagamento")
+}
+
+model ReservaQuartos{
+  reserva Reserva @relation(fields: [reservaId], references: [id])
+  reservaId String
+  quarto Quarto @relation(fields: [quartoId],references: [id])
+  quartoId String
+  @@id([reservaId, quartoId])
+
+  @@map("reserva_de_quartos")
+}
+
+model Tag{
+  id String @id @default(uuid())
+  descricao String @unique
+  cor String
+  quartos TagQuartos[]
+
+  @@map("tag")
+}
+
+model TagQuartos{
+  quarto Quarto @relation(fields: [idQuarto], references: [id])
+  idQuarto String
+  tag Tag @relation(fields: [idTag], references: [id])
+  idTag String
+
+  @@id([idQuarto, idTag])
+
+  @@map("tag_dos_quartos")
+}
+
