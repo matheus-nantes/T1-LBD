@@ -3,7 +3,11 @@ import express, { NextFunction, Request, Response } from 'express';
 import { routes } from './routes';
 import { AppError } from "./errors/AppError";
 
+const cors = require('cors');
+
 const app = express();
+
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 app.use(express.json());
 

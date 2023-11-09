@@ -5,7 +5,11 @@ import { prisma } from "../../../../prisma/client";
 
 export class GetFuncionarioUseCase {
     async execute(): Promise<Funcionario[]>{
-        const funcionarios = await prisma.funcionario.findMany({});
+        const funcionarios = await prisma.funcionario.findMany({
+            orderBy:{
+                nome: "asc"
+            }
+        });
 
         return funcionarios;
     }

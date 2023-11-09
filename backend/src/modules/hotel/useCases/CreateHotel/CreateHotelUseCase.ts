@@ -6,7 +6,7 @@ import { AppError } from "../../../../errors/AppError";
 export class CreateHotelUseCase{
     async execute({cnpj, nome, endereco, numeroEstrelas} : CreateHotelDTO): Promise<Hotel>{
 
-        const hotelAlreadyExists = await prisma.hotel.findUnique({
+        const hotelAlreadyExists = await prisma.hotel.findFirst({
             where: {
                 cnpj,
             }
