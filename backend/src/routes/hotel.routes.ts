@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { CreateHotelController } from "../modules/hotel/useCases/CreateHotel/CreateHotelController";
-import { GetHotelController } from "../modules/hotel/useCases/GetHotel/GetHOtelController";
+import { GetHotelController } from "../modules/hotel/useCases/GetHotel/GetHotelController";
 
 const createHotelController = new CreateHotelController();
 

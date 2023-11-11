@@ -21,10 +21,10 @@ clienteRoutes.post("/", createClienteController.handle);
 
 clienteRoutes.get("/", getClienteController.handle);
 
-clienteRoutes.delete("/:id", getClienteController.handle);
+clienteRoutes.delete("/:id", deleteClienteController.handle);
 
 clienteRoutes.get("/:id", getClienteByIdController.handle);
 
-clienteRoutes.put("/:id",updateClienteController.handle);
+clienteRoutes.put("/",updateClienteController.handle);
 
 export { clienteRoutes };

@@ -2,6 +2,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Home() {
   const router = useRouter();
@@ -44,14 +46,44 @@ export default function Home() {
         .post("http://localhost:3333/hotel", data)
         .then((response) => {
           console.log("Resposta da API:", response.data);
-          window.location.reload();
+          setHoteis((prevHoteis) => {
+            // Encontrar o índice do cliente antigo usando o id
+            const indexToRemove = prevHoteis.findIndex((hotell) => hotell.id === response.data.id);
+      
+            // Remover o cliente antigo e adicionar o novo no array
+            const newClientes = [...prevHoteis];
+            newClientes.pop(indexToRemove);
+      
+            return newClientes;
+          });
+          toast.sucess("Hotel inserido com sucesso!", {
+            position: "top-right",
+            autoClose: 3000, // Fecha automaticamente após 3 segundos
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          
         })
         .catch((error) => {
-          console.error("Erro na requisição:", error);
+          
+          console.log(error)
         });
     } catch (error) {
-      router.push("/hotel");
+      toast.error(`Não foi possível salvar o hotel. Erro: ${error.response}`, {
+        position: "top-right",
+        autoClose: 3000, // Fecha automaticamente após 3 segundos
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      console.log(error)
     }
+    setColapse(false);
   };
 
   useEffect(() => {
@@ -63,7 +95,15 @@ export default function Home() {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Erro na requisição:", error);
+        toast.error(`Não foi possível carregar os funcionários. Erro: ${error.response.data.message}`, {
+          position: "top-right",
+          autoClose: 3000, // Fecha automaticamente após 3 segundos
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         setLoading(false);
       });
   }, []);
@@ -94,10 +134,10 @@ export default function Home() {
         tabIndex="0"
         className="focus:outline-none py-8 w-full"
       >
-        <div className="flex flex-col lg:flex-row  w-full p-auto items-center justify-center">
+        <div className="flex flex-wrap  w-full p-auto items-center justify-center">
           {hoteis.map((hotel, index) => (
             <div
-              className="focus:outline-none w-3/4 lg:w-8/12 lg:mr-7 lg:mb-0 mb-7 bg-white p-6 shadow rounded "
+              className="focus:outline-none w-2/3 lg:w-1/5 m-4  bg-white p-6 shadow rounded "
               key={index}
             >
               <div className="flex items-center border-b border-gray-200 pb-6">

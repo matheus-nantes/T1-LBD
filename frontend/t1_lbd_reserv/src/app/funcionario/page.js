@@ -2,7 +2,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { data } from "autoprefixer";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Home() {
   const router = useRouter();
@@ -60,25 +61,46 @@ export default function Home() {
         .post("http://localhost:3333/funcionario", data)
         .then((response) => {
           console.log("Resposta da API:", response.data);
-          router.push("/hotel");
+          toast.sucess("Hotel adicionado com sucesso", {
+            position: "top-right",
+            autoClose: 3000, // Fecha automaticamente após 3 segundos
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         })
         .catch((error) => {
-          console.error("Erro na requisição:", error);
+          toast.error(error.response.data.message, {
+            position: "top-right",
+            autoClose: 3000, // Fecha automaticamente após 3 segundos
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         });
     } catch (error) {
-      router.push("/hotel");
+      toast.error(error.response.data.message, {
+        position: "top-right",
+        autoClose: 3000, // Fecha automaticamente após 3 segundos
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
-  
-
   useEffect(() => {
-    
     const urlParams = new URLSearchParams(window.location.search);
-      const hotelId = urlParams.get('hotelId');
-      setHotelId(hotelId);
-      console.log(hotelId);
-}, []);
+    const hotelId = urlParams.get("hotelId");
+    setHotelId(hotelId);
+    console.log(hotelId);
+  }, []);
 
   return (
     <>
@@ -118,9 +140,7 @@ export default function Home() {
           <div class="px-6 py-6 lg:px-8">
             <form class="space-y-6" action="#" onSubmit={handleSubmit}>
               <div>
-                <label
-                  class="block mb-2 text-sm font-medium text-gray-900 text-start "
-                >
+                <label class="block mb-2 text-sm font-medium text-gray-900 text-start ">
                   CPF
                 </label>
                 <input
@@ -135,9 +155,7 @@ export default function Home() {
                 />
               </div>
               <div>
-                <label
-                  class="block mb-2 text-sm font-medium text-gray-900 text-start "
-                >
+                <label class="block mb-2 text-sm font-medium text-gray-900 text-start ">
                   SENHA
                 </label>
                 <input
@@ -152,9 +170,7 @@ export default function Home() {
                 />
               </div>
               <div>
-                <label
-                  class="block mb-2 text-sm font-medium text-gray-900 text-start "
-                >
+                <label class="block mb-2 text-sm font-medium text-gray-900 text-start ">
                   NOME
                 </label>
                 <input
@@ -169,9 +185,7 @@ export default function Home() {
                 />
               </div>
               <div>
-                <label
-                  class="block mb-2 text-sm font-medium text-gray-900 text-start "
-                >
+                <label class="block mb-2 text-sm font-medium text-gray-900 text-start ">
                   DATA DE ADMISSAO
                 </label>
                 <input
@@ -186,9 +200,7 @@ export default function Home() {
                 />
               </div>
               <div>
-                <label
-                  class="block mb-2 text-sm font-medium text-gray-900 text-start "
-                >
+                <label class="block mb-2 text-sm font-medium text-gray-900 text-start ">
                   CARGO
                 </label>
                 <input

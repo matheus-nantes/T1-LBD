@@ -2,38 +2,66 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Home() {
   const router = useRouter();
   const [funcionarios, setFuncionarios] = useState([]);
   const [loading, setLoading] = useState(false);
-  
-    try {
-      axios
-        .get("http://localhost:3333/funcionario")
-        .then((response) => {
-          console.log("Resposta da API:", response.data);
-          setFuncionarios(response.data);
-        })
-        .catch((error) => {
-          console.error("Erro na requisição:", error);
-        });
-    } catch (error) {
-      router.push("/hotel");
-    }
 
-  useEffect(() => {
+  try {
     axios
-      .get("http://localhost:3333/hotel")
+      .get("http://localhost:3333/funcionario")
       .then((response) => {
-        console.log("Dados da API:", response.data);
+        console.log("Resposta da API:", response.data);
         setFuncionarios(response.data);
-        setLoading(false);
       })
       .catch((error) => {
-        console.error("Erro na requisição:", error);
-        setLoading(false);
+        toast.error(`Não foi possível carregar os funcionários. Erro: ${error.response.data.message}`, {
+          position: "top-right",
+          autoClose: 3000, // Fecha automaticamente após 3 segundos
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
+  } catch (error) {
+    toast.error(`Não foi possível carregar os funcionários. Erro: ${error.response.data.message}`, {
+      position: "top-right",
+      autoClose: 3000, // Fecha automaticamente após 3 segundos
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
+
+  useEffect(() => {
+    if (!loading) {
+      axios
+        .get("http://localhost:3333/hotel")
+        .then((response) => {
+          console.log("Dados da API:", response.data);
+          setFuncionarios(response.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          toast.error(`Não foi possível carregar os funcionários. Erro: ${error.response.data.message}`, {
+            position: "top-right",
+            autoClose: 3000, // Fecha automaticamente após 3 segundos
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setLoading(false);
+        });
+    }
   }, []);
 
   return (
@@ -82,23 +110,22 @@ export default function Home() {
                 </div>
               </div>
               <div className="px-2">
-              <p
-                      tabIndex="0"
-                      className="focus:outline-none  text-sm leading-normal pt-2 text-gray-500 font-bold"
-                    >
+                <p
+                  tabIndex="0"
+                  className="focus:outline-none  text-sm leading-normal pt-2 text-gray-500 font-bold"
+                >
                   {`Cargo: ${funcionario.cargo}`}
                 </p>
               </div>
               <div className="px-2">
-              <p
-                      tabIndex="0"
-                      className="focus:outline-none  text-sm leading-normal pt-2 text-gray-500 font-bold"
-                    >
+                <p
+                  tabIndex="0"
+                  className="focus:outline-none  text-sm leading-normal pt-2 text-gray-500 font-bold"
+                >
                   {`Admissão: ${funcionario.dataAdmissao}`}
                 </p>
               </div>
-              <div className="w-full flex justify-end">
-              </div>
+              <div className="w-full flex justify-end"></div>
             </div>
           ))}
         </div>
