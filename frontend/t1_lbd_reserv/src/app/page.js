@@ -42,7 +42,15 @@ export default function Home() {
           router.push("/cliente");
         })
         .catch((error) => {
-        
+          toast.error(`Não foi efetuar o login, credenciais inválidas`, {
+            position: "top-right",
+            autoClose: 3000, // Fecha automaticamente após 3 segundos
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         });
     } catch (error) {
       console.log("Erro na requisição: ", error);
@@ -50,11 +58,22 @@ export default function Home() {
             setvalid(false);
             setCpfvalid(false);
           }
+          toast.error(`Não foi efetuar o login, credenciais inválidas`, {
+            position: "top-right",
+            autoClose: 3000, // Fecha automaticamente após 3 segundos
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
     }
   };
 
   return (
     <div className="bg-teal-950 w-screen h-screen flex items-center justify-center content-center bg-gradient-to-br from-green-400 to-blue-600">
+           <title>Login</title>
+           <ToastContainer/>
       <form
         className=" flex flex-col scale-125 bg-black p-8 rounded-xl"
         action="#"

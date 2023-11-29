@@ -15,7 +15,7 @@ export class CreateReservaUseCase {
     quartosReservados, 
     metodoPagamento
   }: CreateReservaDTO): Promise<Reserva> {
-    const clienteExists = await prisma.cliente.findUnique({
+    const clienteExists = await prisma.cliente.findFirst({
       where: {
         id: clienteId,
       },
@@ -25,7 +25,7 @@ export class CreateReservaUseCase {
       throw new AppError("Cliente inexistente!");
     }
 
-    const funcionarioExists = await prisma.funcionario.findUnique({
+    const funcionarioExists = await prisma.funcionario.findFirst({
       where: {
         id: funcionarioId,
       },
@@ -46,15 +46,20 @@ export class CreateReservaUseCase {
     var preco = 0.0;
     var qtdAdultos = 0;
     var qtdCriancas = 0;
+    var diffEmDias = 0;
 
+
+    if(quartosReservados.length === 0){
+      throw new AppError("Não é possível realizar reservas sem quartos");
+    }
     for (const quartoReservadoData of quartosReservados) {//para cada quarto da reserva, valida
-        const quartoExists = await prisma.quarto.findUnique({//se o quarto existe
+        const quartoExists = await prisma.quarto.findFirst({//se o quarto existe
             where:{
                 id: quartoReservadoData.quartoId
             }
         });
         if(!quartoExists){
-            throw new AppError(`Quarto ${quartoReservadoData.quartoNumber} não existe!`);
+            throw new AppError(`Quarto ${quartoReservadoData} não existe!`);
         }
 
         //encontrar todas as reservas daquele quarto
@@ -66,7 +71,7 @@ export class CreateReservaUseCase {
 
         if (reservasDesteQuarto) {//se há reservas
             for (const reservaDesseQuarto of reservasDesteQuarto) {//para cada reserva deste quarto
-                const reservaCompara = await prisma.reserva.findUnique({//busca a reserva corretamente
+                const reservaCompara = await prisma.reserva.findFirst({//busca a reserva corretamente
                     where: {
                         id: reservaDesseQuarto.reservaId
                     }
@@ -84,8 +89,21 @@ export class CreateReservaUseCase {
                 
             }
         }
-        const diffEmDias = Math.floor(checkout.getTime() - checkin.getTime())/ (1000 * 60 * 60 * 24);//calcula quantos dias de duração a reserva tem
-        preco += (quartoExists.precoDiaria.toNumber() * diffEmDias);//adiciona ao preco o valor deste quarto alugado por x dias
+
+        if (checkout instanceof Date) {
+          const checkoutTime: number = checkout.getTime();
+          if (checkin instanceof Date) {
+            const checkinTime: number = checkin.getTime();
+            diffEmDias = Math.floor(Math.abs(checkout.getTime() - checkin.getTime()))/ (1000 * 60 * 60 * 24);//calcula quantos dias de duração a reserva tem
+        
+          } else {
+            console.error('checkout não é uma instância válida de Date');
+          }
+        } else {
+          console.error('checkout não é uma instância válida de Date');
+        }
+
+        preco += (quartoExists.precoDiaria.toNumber() * (diffEmDias < 1? 1 : diffEmDias));//adiciona ao preco o valor deste quarto alugado por x dias
 
         qtdAdultos += quartoExists.capacidadeAdultos;
         qtdCriancas += quartoExists.capacidadeCriancas;
@@ -93,7 +111,7 @@ export class CreateReservaUseCase {
 
 
 
-    if(qtdAdultos > nAdultos){//adultos não podem ocupar lugar de criança
+    if(qtdAdultos < nAdultos){//adultos não podem ocupar lugar de criança
         throw new AppError("Quantidade de Adultos excedente");
     }
 
@@ -115,7 +133,7 @@ export class CreateReservaUseCase {
       },
     });
 
-    //criar lista de quartos reservados
+    if(reserva){
     for (const quartoReservadoData of quartosReservados) {
         const temp = await prisma.reservaQuartos.create({
           data: {
@@ -139,6 +157,10 @@ export class CreateReservaUseCase {
         },
       },
     });
+  }
+  else{
+    throw new AppError("Não foi possíve criar a reserva");
+  }
 
     return reserva;
   }

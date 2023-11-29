@@ -178,7 +178,7 @@ function Navbar() {
             </li>
             <li>
               <a
-                href="/cliente"
+                href="/reserva"
                 class="block py-2 pl-3 pr-4 rounded md:p-0  hover:text-blue-400 text-white  border-gray-700"
                 aria-current="page"
               >

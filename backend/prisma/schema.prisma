@@ -48,6 +48,7 @@ model Hotel{
   endereco String
   numeroEstrelas Int
   funcionarios Funcionario[]
+  quartos Quarto[]
 
   @@map("hotel")
 }
@@ -92,6 +93,9 @@ model Quarto{
 
   reservas ReservaQuartos[]
   tags TagQuartos[]
+
+  hotel Hotel @relation(fields: [hotelId], references: [id])
+  hotelId String
 
   @@map("quarto")
 }

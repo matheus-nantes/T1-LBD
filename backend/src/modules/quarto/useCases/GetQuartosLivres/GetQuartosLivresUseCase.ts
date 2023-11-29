@@ -40,7 +40,8 @@ export class GetQuartosLivresUseCase {
       },
     });
 
-    var quartosOcupados;
+    console.log(ocupados);
+    var quartosOcupados = [];
 
     for (const reservaOcupada of ocupados) {//para cada reserva naquele período
       const reservaQuartosOcupados = await prisma.reservaQuartos.findMany({//obtenho os quartos de cada reserva
@@ -55,11 +56,13 @@ export class GetQuartosLivresUseCase {
                     id: quarto.quartoId
                 }
             })
+            console.log(temp);
+            if(temp){
+            quartosOcupados.push(temp?.id);}
 
-            quartosOcupados.push(temp?.id);
         }
     }
-
+    console.log("ocupados ", quartosOcupados);
     const quartosLivres = await prisma.quarto.findMany({
         where:{
             id:{
@@ -67,6 +70,8 @@ export class GetQuartosLivresUseCase {
             }
         }
     })
+
+    console.group(quartosLivres);
 
     return quartosLivres;
   }

@@ -95,22 +95,14 @@ export default function Home() {
         setLoading(false);
       })
       .catch((error) => {
-        toast.error(`Não foi possível carregar os funcionários. Erro: ${error.response.data.message}`, {
-          position: "top-right",
-          autoClose: 3000, // Fecha automaticamente após 3 segundos
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
         setLoading(false);
       });
   }, []);
 
   return (
     <>
-      <div className="w-full h-[80px] bg-blue-500 p-6 mb-8 text-center text-white text-2xl bg-blue-600">
+    <ToastContainer/>
+      <div className="w-full h-[85px]  bg-gradient-to-br from-green-400 to-blue-600 p-6 mb-8 text-center text-white text-2xl bg-blue-600">
         HOTÉIS
       </div>
       {loading ? (

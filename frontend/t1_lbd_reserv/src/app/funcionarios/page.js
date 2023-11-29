@@ -66,7 +66,8 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-full h-[80px] hover:z-0 transition duration-500 hover:bg-opacity-0.5 h-1/10 bg-blue-500 p-8 mb-8 text-center text-white text-2xl bg-blue-600">
+    <ToastContainer/>
+      <div className="w-full h-[85px] hover:z-0 transition duration-500 hover:bg-opacity-0.5 h-1/10 bg-blue-500 p-8 mb-8 text-center text-white text-2xl  bg-gradient-to-br from-green-400 to-blue-600">
         Funcionários
       </div>
       {loading ? (

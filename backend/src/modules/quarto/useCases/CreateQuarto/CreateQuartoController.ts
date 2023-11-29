@@ -4,6 +4,7 @@ import { CreateQuartoUseCase } from "./CreateQuartoUseCase";
 export class CreateQuartoController {
   async handle(req: Request, res: Response) {
     const {
+      hotelId,
       numero,
       capacidadeAdultos,
       capacidadeCriancas,
@@ -15,6 +16,7 @@ export class CreateQuartoController {
     const createQuartoUseCase = new CreateQuartoUseCase();
 
     const result = await createQuartoUseCase.execute({
+      hotelId,
       numero,
       capacidadeAdultos,
       capacidadeCriancas,

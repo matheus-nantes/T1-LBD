@@ -104,7 +104,8 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-full h-1/10 bg-seal-600 p-8 mb-8 text-center text-white text-2xl bg-teal-700">
+    <ToastContainer/>
+      <div className="w-full h-[85px]  bg-gradient-to-br from-green-400 to-blue-600 p-8 mb-8 text-center text-white text-2xl bg-teal-700">
         Funcionários
       </div>
       <div className="w-full p-8 mb-8 text-center flex justify-center ">

@@ -93,7 +93,7 @@ export default function Home() {
         })
         .catch((error) => {
           console.error("Erro na requisição:", error);
-          toast.error(error.response.data.message, {
+          toast.error(error.response, {
             position: "top-right",
             autoClose: 3000, // Fecha automaticamente após 3 segundos
             hideProgressBar: false,
@@ -104,7 +104,7 @@ export default function Home() {
           });
         });
     } catch (error) {
-      toast.error(error.response.data.message, {
+      toast.error(error.response, {
         position: "top-right",
         autoClose: 3000, // Fecha automaticamente após 3 segundos
         hideProgressBar: false,
@@ -255,7 +255,8 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-full h-[80px] bg-teal-600 p-6 mb-4 text-center text-white text-2xl bg-teal-500">
+       <title>My Title</title>
+      <div className="w-full h-[80px]  bg-gradient-to-br from-green-400 to-blue-600 p-6 mb-4 text-center text-white text-2xl bg-teal-500">
         CLIENTES
       </div>
 
@@ -319,6 +320,7 @@ export default function Home() {
                 >
                   <div class="flex items-center space-x-4">
                     <button
+                    title="Cadastrar reserva"
                       className={` m-2 w-10 h-10 ease-in-out duration-500 hover:opacity-100 transform ${
                         destaque[index]
                           ? "scale-100 opacity-80"
@@ -335,7 +337,7 @@ export default function Home() {
                       }}
                     >
                       <img
-                        src="./icons8-lixo.gif" // Substitua com o caminho do seu arquivo GIF
+                        src="./icons8-calendário.gif" // Substitua com o caminho do seu arquivo GIF
                         alt="GIF"
                         className="absolute inset-0 w-full h-full object-cover rounded-lg"
                       />
@@ -360,10 +362,31 @@ export default function Home() {
                         {cliente.email}
                       </p>
                     </div>
-                    <div class="flex  text-base w-match text-end font-semibold text-white">
-                      {cliente.nivel}
-                    </div>
                     <button
+                    title="Excluir cliente"
+                      className={` m-2 w-10 h-10 ease-in-out duration-500 hover:opacity-100 transform ${
+                        destaque[index]
+                          ? "scale-100 opacity-80"
+                          : "scale-0 opacity-0"
+                      }  bg-red-500 w-50 h-50 rounded-lg p-2 hover:bg-yellow-300`}
+                      onClick={() => {
+                        setExcluir(true);
+                        setId(clientes[index].id);
+                        setcpf(clientes[index].cpf);
+                        setNome(clientes[index].nome);
+                        setNivel(clientes[index].nivel);
+                        setTelefone(clientes[index].telefone);
+                        setEmail(clientes[index].email);
+                      }}
+                    >
+                      <img
+                        src="./icons8-lixo.gif" // Substitua com o caminho do seu arquivo GIF
+                        alt="GIF"
+                        className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                      />
+                    </button>
+                    <button
+                    title="Editar dados do cliente"
                       className={` ease-in-out w-10 h-10 duration-500 hover:opacity-100 transform ${
                         destaque[index]
                           ? "scale-100 opacity-80"
@@ -414,6 +437,7 @@ export default function Home() {
                   Cadastrar Cliente
                 </div>
                 <button
+                title="Fechar"
                   type="button"
                   onClick={() => setCadastrar(false)}
                   class="m-2 justify-end text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center"
@@ -517,6 +541,7 @@ export default function Home() {
                   </div>
                   <div></div>
                   <button
+                    title="Cadastrar Cliente"
                     type="submit"
                     class="w-full mb-2 text-white bg-teal-600 hover:bg-teal-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
@@ -541,6 +566,7 @@ export default function Home() {
                   Editar Cliente
                 </div>
                 <button
+                title="Fechar"
                   type="button"
                   onClick={() => setEditar(false)}
                   class="m-2 justify-end text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center"
@@ -644,10 +670,11 @@ export default function Home() {
                   </div>
                   <div></div>
                   <button
+                    title="Salvar alterações"
                     type="submit"
                     class="w-full mb-2 text-white bg-teal-600 hover:bg-teal-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
-                    Cadastrar
+                    Salvar
                   </button>
                 </form>
               </div>
@@ -669,6 +696,7 @@ export default function Home() {
             <div class="flex p-4 w-full max-w-md h-full justify-center items-center ">
               <div class="absolute center self-center p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5  border border-white-2">
                 <button
+                title="Fechar"
                   type="button"
                   onClick={() => {
                     setExcluir(false);

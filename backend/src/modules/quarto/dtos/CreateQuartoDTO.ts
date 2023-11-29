@@ -1,4 +1,5 @@
 export interface CreateQuartoDTO{
+    hotelId: string;
     numero: number;
     capacidadeAdultos: number;
     capacidadeCriancas: number;

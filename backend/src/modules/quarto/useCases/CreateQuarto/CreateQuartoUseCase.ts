@@ -5,6 +5,7 @@ import { AppError } from "../../../../errors/AppError";
 
 export class CreateQuartoUseCase {
   async execute({
+    hotelId,
     numero,
     capacidadeAdultos,
     capacidadeCriancas,
@@ -12,8 +13,9 @@ export class CreateQuartoUseCase {
     precoDiaria,
     tipo,
   }: CreateQuartoDTO): Promise<Quarto> {
-    const quartoAlreadyExists = await prisma.quarto.findUnique({
+    const quartoAlreadyExists = await prisma.quarto.findFirst({
       where: {
+        hotelId,
         numero,
       },
     });
@@ -24,6 +26,7 @@ export class CreateQuartoUseCase {
 
     const quarto = await prisma.quarto.create({
       data: {
+        hotelId,
         numero,
         capacidadeAdultos,
         capacidadeCriancas,

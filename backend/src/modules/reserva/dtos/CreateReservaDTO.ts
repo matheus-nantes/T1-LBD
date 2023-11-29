@@ -12,5 +12,4 @@ export interface CreateReservaDTO{
 
 export interface QuartoReservadoDTO {
     quartoId: string;
-    quartoNumber: string;
 }
